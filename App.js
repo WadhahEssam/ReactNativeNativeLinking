@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,6 +14,9 @@ import {
   Text,
   StatusBar,
   Alert,
+  NativeEventEmitter,
+  NativeModules,
+  DeviceEventEmitter,
 } from 'react-native';
 import {
   ActionBar,
@@ -38,6 +41,13 @@ import CalendarModule from './NativeModules/CalanderModule';
 const App = () => {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
+
+  useEffect(() => {
+    console.log("working");
+    DeviceEventEmitter.addListener('CalenderEvent', (event) => {
+      console.log({event});
+    });
+  }, []);
 
   return (
     <>
@@ -94,15 +104,36 @@ const App = () => {
             <Button
               disabled={title === '' || location === ''}
               backgroundColor="#30B650"
-              label="انقر هنا"
+              label="Create Event"
+              labelStyle={{fontWeight: '600'}}
+              style={{marginBottom: 10}}
+              enableShadow
+              onPress={async () => {
+                // CalendarModule.createCalenderEvent({
+                //   title,
+                //   location,
+                //   callback: (result) => {
+                //     console.log({result});
+                //   },
+                // });
+                const result = await CalendarModule.createCalenderEventPromise({
+                  title,
+                  location,
+                });
+                console.log({result});
+              }}
+            />
+          </View>
+          <View flex={1} style={{marginTop: 20, paddingHorizontal: 40}}>
+            <Button
+              backgroundColor="#30B650"
+              label="Get Constants"
               labelStyle={{fontWeight: '600'}}
               style={{marginBottom: 10}}
               enableShadow
               onPress={() => {
-                CalendarModule.createCalenderEvent({
-                  title,
-                  location,
-                });
+                const constants = CalendarModule.getConstants();
+                console.log({constants});
               }}
             />
           </View>
