@@ -1,5 +1,7 @@
 package com.reactnativenativelinking;
 
+import android.content.Intent;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,8 +30,21 @@ class CalendarModule extends ReactContextBaseJavaModule {
     // a method that you want to be accessed by the native module
     @ReactMethod
     public void createCalendarEvent(String name, String location) {
-        Toast.makeText(context, "Create event called with name: " + name
-                + " and location: " + location, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, name)
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, location);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
+
+//        Toast.makeText(context, "Create event called with name: " + name
+//                + " and location: " + location, Toast.LENGTH_SHORT).show();
+
         Log.d("CalendarModule", "Create event called with name: " + name
                 + " and location: " + location);
     }

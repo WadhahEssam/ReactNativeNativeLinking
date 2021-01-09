@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -24,6 +24,7 @@ import {
   PageCarousel,
   Colors,
   Card,
+  TextField,
 } from 'react-native-ui-lib';
 
 import {
@@ -35,6 +36,9 @@ import {
 import CalendarModule from './NativeModules/CalanderModule';
 
 const App = () => {
+  const [title, setTitle] = useState('');
+  const [location, setLocation] = useState('');
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -57,8 +61,38 @@ const App = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
+          <View
+            style={{
+              marginTop: 20,
+              paddingHorizontal: 40,
+            }}>
+            <TextField
+              flex={1}
+              hideUnderline={false}
+              title={'Title'}
+              value={title}
+              onChangeText={(value) => {
+                setTitle(value);
+              }}
+              helperText={'Helper Text'}
+              editable
+              maxLength={20}
+            />
+            <TextField
+              hideUnderline={false}
+              title={'Location'}
+              helperText={'Helper Text'}
+              editable
+              value={location}
+              onChangeText={(value) => {
+                setLocation(value);
+              }}
+              maxLength={20}
+            />
+          </View>
           <View flex={1} style={{marginTop: 20, paddingHorizontal: 40}}>
             <Button
+              disabled={title === '' || location === ''}
               backgroundColor="#30B650"
               label="انقر هنا"
               labelStyle={{fontWeight: '600'}}
@@ -66,8 +100,8 @@ const App = () => {
               enableShadow
               onPress={() => {
                 CalendarModule.createCalenderEvent({
-                  title: 'hello there',
-                  location: 'the location',
+                  title,
+                  location,
                 });
               }}
             />
