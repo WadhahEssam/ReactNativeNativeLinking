@@ -15,8 +15,16 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {ActionBar, Button, Carousel, View, Spacings, PageCarousel, Colors, Card} from 'react-native-ui-lib';
-import { NativeModules } from "react-native";
+import {
+  ActionBar,
+  Button,
+  Carousel,
+  View,
+  Spacings,
+  PageCarousel,
+  Colors,
+  Card,
+} from 'react-native-ui-lib';
 
 import {
   Header,
@@ -24,6 +32,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import CalendarModule from './NativeModules/CalanderModule';
 
 const App = () => {
   return (
@@ -56,7 +65,10 @@ const App = () => {
               style={{marginBottom: 10}}
               enableShadow
               onPress={() => {
-                NativeModules.CalendarModule.createCalendarEvent("test", "test Location");
+                CalendarModule.createCalenderEvent({
+                  title: 'hello there',
+                  location: 'the location',
+                });
               }}
             />
           </View>
@@ -96,9 +108,15 @@ const App = () => {
                     indicatorSize: 25,
                     borderWidth: 3,
                   }}>
-                    <View style={{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center"}}>
-                      <Text>يا هلا و مرحب</Text>
-                    </View>
+                  <View
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>يا هلا و مرحب</Text>
+                  </View>
                 </Card>
               ))}
             </Carousel>

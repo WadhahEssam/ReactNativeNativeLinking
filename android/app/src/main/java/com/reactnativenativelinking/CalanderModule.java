@@ -28,7 +28,8 @@ class CalendarModule extends ReactContextBaseJavaModule {
     // a method that you want to be accessed by the native module
     @ReactMethod
     public void createCalendarEvent(String name, String location) {
-        Toast.makeText(context, "Calendar created", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Create event called with name: " + name
+                + " and location: " + location, Toast.LENGTH_SHORT).show();
         Log.d("CalendarModule", "Create event called with name: " + name
                 + " and location: " + location);
     }
